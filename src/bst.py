@@ -36,8 +36,10 @@ class BST(bt.BT):
         '''
         Returns the height of the tree.
         '''
-        logging.info("TODO@src/bst.py: implement height()")
-        return 0
+        if self.is_empty():
+            return 0
+
+        return 1 + max(self.get_lc().height(), self.get_rc().height())
 
     def preorder(self):
         '''
@@ -61,6 +63,7 @@ class BST(bt.BT):
         '''
         if self.is_empty():
             return []
+        return self.get_lc().postorder() + self.get_rc().postorder() + [self.get_value()]
 
     def bfs_order_star(self):
         '''
@@ -75,8 +78,22 @@ class BST(bt.BT):
         The output of t.bfs_order_star() should be:
         [ 10, 5, 15, None, None, None, 20 ]
         '''
-        log.info("TODO@src/bst.py: implement bfs_order_star()")
-        return []
+        result = []
+        if not self.is_empty():
+            q = []
+            q.append(self)
+            while len(q) != 0:
+                p = q.pop(0)
+                result.append(p.get_value())
+
+                if p.get_lc() is not None:
+                    q.append(p.get_lc())
+
+                if p.get_rc() is not None:
+                    q.append(p.get_rc())
+
+
+        return result
 
     def add(self, v):
         '''
