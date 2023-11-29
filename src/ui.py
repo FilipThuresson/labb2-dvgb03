@@ -183,7 +183,28 @@ class TerminalUI:
         Shows a pretty 2D tree based on the output of bfs_order_star(). None
         values are are replaced by stars ("*").
         '''
-        log.info("TODO@src/ui.py: implement show_2d() using bfs_order_star()")
+        treeNodes = self._tree.bfs_order_star()
+        startIndex = 0
+        endIndex = lineCount = 1
+    
+        for i in range(self._tree.height()):
+    
+            indentationCount = (int)(self.menu_width() / lineCount)
+    
+            for index in range(startIndex, endIndex):
+    
+                print(
+                    f"\t{treeNodes[index] if treeNodes[index] is not None else '*'}".expandtabs(
+                        indentationCount),
+                    end="")
+    
+                print("\t".expandtabs(indentationCount), end="")
+    
+            print("\n")
+            startIndex = endIndex
+            endIndex = (endIndex * 2) + 1
+            lineCount *= 2
+        
 
 if __name__ == "__main__":
     log.critical("ui contains no main module")

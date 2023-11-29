@@ -20,14 +20,19 @@ class BST(bt.BT):
         '''
         Returns true if the value `v` is a member of the tree.
         '''
-        logging.info("TODO@src/bst.py: implement is_member()")
-        return False
+        result = False
+        if v == self.get_value():
+            return True
+        if self.get_lc():
+            result = result or self.get_lc().is_member(v)
+        if self.get_rc():
+            result = result or self.get_rc().is_member(v)
+        return result
 
     def size(self):
         '''
         Returns the number of nodes in the tree.
         '''
-        #logging.info("TODO@src/bst.py: implement size()")
         if self.is_empty():
             return 0
         return 1 + self.get_lc().size() + self.get_rc().size()
@@ -80,19 +85,20 @@ class BST(bt.BT):
         '''
         result = []
         if not self.is_empty():
-            q = []
-            q.append(self)
-            while len(q) != 0:
-                p = q.pop(0)
-                result.append(p.get_value())
-
-                if p.get_lc() is not None:
-                    q.append(p.get_lc())
-
-                if p.get_rc() is not None:
-                    q.append(p.get_rc())
-
-
+            size = (2**self.height()) -1
+            q = [self]
+            i = 0
+            while q and i < size:
+                n = q.pop(0)
+                if n is not None:
+                    result.append(n.get_value())
+                    q.append(n.get_lc())
+                    q.append(n.get_rc())
+                else:
+                    result.append(None)
+                    q.append(None)
+                    q.append(None)
+                i += 1
         return result
 
     def add(self, v):
@@ -116,6 +122,8 @@ class BST(bt.BT):
         '''
         log.info("TODO@src/bst.py: implement delete()")
         return self
+    
+    
 
 if __name__ == "__main__":
     log.critical("module contains no main module")
