@@ -120,9 +120,55 @@ class BST(bt.BT):
         Removes the value `v` from the tree and returns the new (updated) tree.
         If `v` is a non-member, the same tree is returned without modification.
         '''
-        log.info("TODO@src/bst.py: implement delete()")
+        if self.is_empty() or not self.is_member(v):
+            return self
+        elif self.get_value() == v:
+            self.set_value(self.detach())
+        elif self.get_value() < v:
+            self.get_rc().delete(v)
+        else:
+            self.get_lc().delete(v)
+
         return self
-    
+
+    def detach(self):
+        if self.get_rc().is_empty() and self.get_lc().is_empty():
+            return None
+
+        elif not self.get_lc().is_empty() and not self.get_rc().is_empty():
+            if self.get_lc().height() < self.get_rc().height():
+                return self.get_rc().get_rc_lm()
+            else:
+                return self.get_lc().get_lc_rm()
+
+        elif not self.get_rc().is_empty() and self.get_lc().is_empty():
+            return self.get_rc().get_rc_lm()
+        else:
+            return self.get_lc().get_lc_rm()
+
+    def get_rc_lm(self):
+        if self.get_lc().is_empty():
+            temp = self.get_value()
+            if self.get_rc().is_empty():
+                self.set_value(None)
+            else:
+                self.set_value(self.get_rc().get_value())
+                self.set_rc(self.get_rc().get_rc())
+            return temp
+        else:
+            return self.get_lc().get_rc_lm()
+
+    def get_lc_rm(self):
+        if self.get_rc().is_empty():
+            temp = self.get_value()
+            if self.get_lc().is_empty():
+                self.set_value(None)
+            else:
+                self.set_value(self.get_lc().get_value())
+                self.set_lc(self.get_lc().get_lc())
+            return temp
+        else:
+            return self.get_rc().get_lc_rm()
     
 
 if __name__ == "__main__":
