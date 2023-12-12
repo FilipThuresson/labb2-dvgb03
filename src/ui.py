@@ -125,7 +125,7 @@ class TerminalUI:
         '''
         Returns the menu width.
         '''
-        return 32
+        return 64
 
     def menu_options(self):
         '''
@@ -183,27 +183,23 @@ class TerminalUI:
         Shows a pretty 2D tree based on the output of bfs_order_star(). None
         values are are replaced by stars ("*").
         '''
-        treeNodes = self._tree.bfs_order_star()
-        startIndex = 0
-        endIndex = lineCount = 1
-    
+
+        tree = self._tree.bfs_order_star()
+        start = 0
+
         for i in range(self._tree.height()):
-    
-            indentationCount = (int)(self.menu_width() / lineCount)
-    
-            for index in range(startIndex, endIndex):
-    
-                print(
-                    f"\t{treeNodes[index] if treeNodes[index] is not None else '*'}".expandtabs(
-                        indentationCount),
-                    end="")
-    
-                print("\t".expandtabs(indentationCount), end="")
-    
-            print("\n")
-            startIndex = endIndex
-            endIndex = (endIndex * 2) + 1
-            lineCount *= 2
+            last = start + 2**i
+            indent = int((self.menu_width()) / (2 ** i))
+
+            for j in range(start, last):
+                print("\t".expandtabs(indent), end="")
+                print(tree[j] if tree[j] is not None else '*', end="")
+                print("\t".expandtabs(indent), end="")
+
+            print()
+            start = last
+
+
         
 
 if __name__ == "__main__":
